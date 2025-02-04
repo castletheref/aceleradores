@@ -8,7 +8,7 @@ st.set_page_config(page_title="Dashboard de Aceleradores", layout="wide")
 @st.cache_data
 def load_data():
     file_path = 'https://github.com/castletheref/aceleradores/blob/master/dataaceleradores.xlsx'
-    df = pd.read_excel(file_path, sheet_name="Hoja1")
+    df = pd.read_excel(file_path, sheet_name="Hoja1", engine='openpyxl')
     return df
 
 df = load_data()

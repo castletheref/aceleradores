@@ -3,7 +3,7 @@ import pandas as pd
 import openpyxl
 
 # Configuración del dashboard (Debe ir antes que cualquier otro comando de Streamlit)
-st.set_page_config(page_title="Dashboard de Aceleradores", layout="wide")
+st.set_page_config(page_title="Aceleradores Campo", layout="wide")
 
 # Cargar datos
 @st.cache_data
@@ -14,8 +14,7 @@ def load_data():
 
 df = load_data()
 
-st.title("📊 Dashboard Aceleradores Campo")
-import streamlit as st
+st.title("📊 Aceleradores Campo")
 
 # Filtro de Distrito
 distrito_seleccionado = st.selectbox("Selecciona un Distrito", ["Todos"] + df["Distrito"].unique().tolist())

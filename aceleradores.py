@@ -13,7 +13,6 @@ def load_data():
     return df
 
 df = load_data()
-#Zona	Nombre del gestor	Bucket Inicial	Cuentas Asignadas	Cuentas Contenidas	Flujo Domiciliacion	Porcentaje de contencion	Arancel	Monto Acelerador	Distrito
 
 st.title("📊 Dashboard Aceleradores Campo")
 

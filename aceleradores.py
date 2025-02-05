@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import openpyxl
 
 # Configuración del dashboard (Debe ir antes que cualquier otro comando de Streamlit)
 st.set_page_config(page_title="Dashboard de Aceleradores", layout="wide")
@@ -7,7 +8,7 @@ st.set_page_config(page_title="Dashboard de Aceleradores", layout="wide")
 # Cargar datos
 @st.cache_data
 def load_data():
-    file_path = 'https://github.com/castletheref/aceleradores/blob/master/dataaceleradores.xlsx'
+    file_path = 'https://raw.githubusercontent.com/castletheref/aceleradores/master/dataaceleradores.xlsx'
     df = pd.read_excel(file_path, sheet_name="Hoja1", engine='openpyxl')
     return df
 

@@ -2,18 +2,6 @@ import streamlit as st
 import pandas as pd
 import openpyxl
 
-# Cambiar el fondo de la página
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background-color: #16404D;
-    }
-    </style>
-    """, 
-    unsafe_allow_html=True
-)
-
 # Configuración del dashboard (Debe ir antes que cualquier otro comando de Streamlit)
 st.set_page_config(page_title="Dashboard de Aceleradores", layout="wide")
 

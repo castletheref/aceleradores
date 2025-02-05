@@ -50,12 +50,8 @@ col1, col2, col3, col4 = st.columns(4)
 col1.metric("Cuentas Asignadas", df_filtrado["Cuentas Asignadas"].sum())
 col2.metric("Cuentas Contenidas", df_filtrado["Cuentas Contenidas"].sum())
 col3.metric("Flujo domiciliacion", f"${df_filtrado['Flujo Domiciliacion'].sum():,.2f}")
-# Calcular la suma de la columna 'acelerador' para la zona seleccionada
 suma_acelerador = df_filtrado["Monto Acelerador"].sum()
-
-# Mostrar el insight adicional
-#col4 = st.columns(1)[0]
-col4.metric("Monto Aceleradores", f"{suma_acelerador:,.2f}")
+col4.metric("Monto Aceleradores", f"${suma_acelerador:,.2f}")
 
 
 # Tabla de datos

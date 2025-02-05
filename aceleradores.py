@@ -15,11 +15,21 @@ def load_data():
 df = load_data()
 
 st.title("📊 Dashboard Aceleradores Campo")
+import streamlit as st
 
-# Filtros
-zona_seleccionada = st.selectbox("Selecciona una Zona", df["Zona"].unique())
+# Filtro de Distrito
+distrito_seleccionado = st.selectbox("Selecciona un Distrito", ["Todos"] + df["Distrito"].unique().tolist())
 
-#Obtener el nombre del gestor correspondiente a la zona seleccionada
+# Filtrar las zonas basadas en el distrito seleccionado
+if distrito_seleccionado == "Todos":
+    zonas_disponibles = df["Zona"].unique()
+else:
+    zonas_disponibles = df[df["Distrito"] == distrito_seleccionado]["Zona"].unique()
+
+# Filtro de Zona
+zona_seleccionada = st.selectbox("Selecciona una Zona", zonas_disponibles)
+
+# Obtener el nombre del gestor correspondiente a la zona seleccionada
 gestor_seleccionado = df[df["Zona"] == zona_seleccionada]["Nombre del gestor"].unique()
 
 # Asegurar que hay un gestor para la zona seleccionada
@@ -33,6 +43,7 @@ st.text_input("Nombre del gestor", value=gestor_seleccionado, disabled=True)
 
 # Filtrar el DataFrame según la zona y el gestor seleccionado
 df_filtrado = df[(df["Zona"] == zona_seleccionada) & (df["Nombre del gestor"] == gestor_seleccionado)]
+
 
 # KPIs
 col1, col2, col3, col4 = st.columns(4)

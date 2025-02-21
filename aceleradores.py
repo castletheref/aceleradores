@@ -2,62 +2,65 @@ import streamlit as st
 import pandas as pd
 import openpyxl
 
-# Configuración del dashboard (Debe ir antes que cualquier otro comando de Streamlit)
-#st.set_page_config(page_title="Aceleradores Campo", layout="wide")
-st.set_page_config(page_title="Dashboard PF", 
-                   page_icon=":smiley:",
-                  layout='wide'
-)
+# Configuración del dashboard
+st.set_page_config(page_title="Dashboard PF", page_icon=":smiley:", layout='wide')
 
-# Cargar datos
+# Sidebar para seleccionar el reporte
+st.sidebar.title("Selecciona un Reporte")
+reporte_seleccionado = st.sidebar.radio("Reportes", ["Aceleradores Campo", "Resumen"])
+
+# Función para cargar datos
 @st.cache_data
-def load_data():
-    file_path = 'https://raw.githubusercontent.com/castletheref/aceleradores/master/dataaceleradores.xlsx'
-    df = pd.read_excel(file_path, sheet_name="Hoja1", engine='openpyxl')
+def load_data(file_path, sheet_name):
+    df = pd.read_excel(file_path, sheet_name=sheet_name, engine='openpyxl')
     return df
 
-df = load_data()
+# Definir la fuente de datos según el reporte seleccionado
+if reporte_seleccionado == "Aceleradores Campo":
+    file_path = 'https://raw.githubusercontent.com/castletheref/aceleradores/master/dataaceleradores.xlsx'
+    sheet_name = "Hoja1"
+    df = load_data(file_path, sheet_name)
+    st.title("📊 Aceleradores Campo")
 
-st.title("📊 Aceleradores Campo")
+    # Filtro de Distrito
+    distrito_seleccionado = st.selectbox("Selecciona un Distrito", ["Todos"] + df["Distrito"].unique().tolist())
 
-# Filtro de Distrito
-distrito_seleccionado = st.selectbox("Selecciona un Distrito", ["Todos"] + df["Distrito"].unique().tolist())
+    # Filtrar las zonas basadas en el distrito seleccionado
+    if distrito_seleccionado == "Todos":
+        zonas_disponibles = df["Zona"].unique()
+    else:
+        zonas_disponibles = df[df["Distrito"] == distrito_seleccionado]["Zona"].unique()
 
-# Filtrar las zonas basadas en el distrito seleccionado
-if distrito_seleccionado == "Todos":
-    zonas_disponibles = df["Zona"].unique()
-else:
-    zonas_disponibles = df[df["Distrito"] == distrito_seleccionado]["Zona"].unique()
+    # Filtro de Zona
+    zona_seleccionada = st.selectbox("Selecciona una Zona", zonas_disponibles)
 
-# Filtro de Zona
-zona_seleccionada = st.selectbox("Selecciona una Zona", zonas_disponibles)
+    # Obtener el nombre del gestor correspondiente a la zona seleccionada
+    gestor_seleccionado = df[df["Zona"] == zona_seleccionada]["Nombre del gestor"].unique()
+    gestor_seleccionado = gestor_seleccionado[0] if len(gestor_seleccionado) > 0 else "No disponible"
 
-# Obtener el nombre del gestor correspondiente a la zona seleccionada
-gestor_seleccionado = df[df["Zona"] == zona_seleccionada]["Nombre del gestor"].unique()
+    # Mostrar el nombre del gestor en un campo de solo lectura
+    st.text_input("Nombre del gestor", value=gestor_seleccionado, disabled=True)
 
-# Asegurar que hay un gestor para la zona seleccionada
-if len(gestor_seleccionado) > 0:
-    gestor_seleccionado = gestor_seleccionado[0]  # Tomar el primer gestor encontrado
-else:
-    gestor_seleccionado = "No disponible"  # Mensaje si no hay gestor en la zona
+    # Filtrar el DataFrame según la zona y el gestor seleccionado
+    df_filtrado = df[(df["Zona"] == zona_seleccionada) & (df["Nombre del gestor"] == gestor_seleccionado)]
 
-# Mostrar el nombre del gestor en un campo de solo lectura
-st.text_input("Nombre del gestor", value=gestor_seleccionado, disabled=True)
+    # KPIs
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Cuentas Asignadas", df_filtrado["Cuentas Asignadas"].sum())
+    col2.metric("Cuentas Contenidas", df_filtrado["Cuentas Contenidas"].sum())
+    col3.metric("Flujo domiciliacion", f"${df_filtrado['Flujo Domiciliacion'].sum():,.2f}")
+    col4.metric("Monto Aceleradores", f"${df_filtrado['Monto Acelerador'].sum():,.2f}")
 
-# Filtrar el DataFrame según la zona y el gestor seleccionado
-df_filtrado = df[(df["Zona"] == zona_seleccionada) & (df["Nombre del gestor"] == gestor_seleccionado)]
+    # Tabla de datos
+    st.subheader("📌 Datos Detallados")
+    st.dataframe(df_filtrado)
 
-
-# KPIs
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Cuentas Asignadas", df_filtrado["Cuentas Asignadas"].sum())
-col2.metric("Cuentas Contenidas", df_filtrado["Cuentas Contenidas"].sum())
-col3.metric("Flujo domiciliacion", f"${df_filtrado['Flujo Domiciliacion'].sum():,.2f}")
-suma_acelerador = df_filtrado["Monto Acelerador"].sum()
-col4.metric("Monto Aceleradores", f"${suma_acelerador:,.2f}")
-
-
-# Tabla de datos
-st.subheader("📌 Datos Detallados")
-st.dataframe(df_filtrado)
-
+elif reporte_seleccionado == "Resumen":
+    file_path = 'https://raw.githubusercontent.com/castletheref/aceleradores/master/resumen.xlsx'
+    sheet_name = "Resumen"
+    df = load_data(file_path, sheet_name)
+    st.title("📊 Resumen General")
+    
+    # Mostrar la tabla de datos completa
+    st.subheader("📌 Datos del Resumen")
+    st.dataframe(df)

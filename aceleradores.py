@@ -56,7 +56,7 @@ if reporte_seleccionado == "Aceleradores Campo":
     st.dataframe(df_filtrado)
 
 elif reporte_seleccionado == "Resumen":
-    file_path = 'https://raw.githubusercontent.com/castletheref/aceleradores/master/resumen.xlsx'
+    file_path = 'https://raw.githubusercontent.com/castletheref/aceleradores/master/Resumen.xlsx'
     sheet_name = "Resumen"
     df = load_data(file_path, sheet_name)
     st.title("📊 Resumen General")

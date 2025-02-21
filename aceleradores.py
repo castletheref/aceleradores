@@ -6,19 +6,9 @@ import openpyxl
 st.set_page_config(page_title="Dashboard PF", page_icon=":smiley:", layout='wide')
 
 
-# CSS para ocultar la sidebar después de la selección
-hide_sidebar_style = """
-    <style>
-        [data-testid="stSidebar"] {display: none;}
-    </style>
-"""
-
 # Sidebar para seleccionar el reporte
 st.sidebar.title("Selecciona un Reporte")
 reporte_seleccionado = st.sidebar.radio("Reportes", ["Resumen", "Aceleradores Campo"])
-
-# Si el usuario selecciona un reporte, ocultar el sidebar
-st.markdown(hide_sidebar_style, unsafe_allow_html=True)
 
 # Función para cargar datos
 @st.cache_data

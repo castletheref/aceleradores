@@ -57,7 +57,7 @@ if reporte_seleccionado == "Aceleradores Campo":
 
 elif reporte_seleccionado == "Resumen":
     file_path = 'https://raw.githubusercontent.com/castletheref/aceleradores/master/Resumen.xlsx'
-    sheet_name = "Resumen"
+    sheet_name = "Hoja1"
     df = load_data(file_path, sheet_name)
     st.title("📊 Resumen General")
     

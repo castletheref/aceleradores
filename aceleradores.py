@@ -3,7 +3,11 @@ import pandas as pd
 import openpyxl
 
 # Configuración del dashboard (Debe ir antes que cualquier otro comando de Streamlit)
-st.set_page_config(page_title="Aceleradores Campo", layout="wide")
+#st.set_page_config(page_title="Aceleradores Campo", layout="wide")
+st.set_page_config(page_title="Dashboard PF", 
+                   page_icon=":smiley:",
+                  layout='wide'
+)
 
 # Cargar datos
 @st.cache_data
